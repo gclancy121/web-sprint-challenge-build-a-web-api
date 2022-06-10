@@ -1,9 +1,22 @@
+//imports
 const express = require('express');
-const server = express();
 
-// Configure your server here
-// Build your actions router in /api/actions/actions-router.js
-// Build your projects router in /api/projects/projects-router.js
-// Do NOT `server.listen()` inside this file!
+//server setup & middleware
+const server = express();
+server.use(express.json());
+
+
+server.get('/', (req, res) => {
+  res.send(`
+  <h1>Action and Project API</h1>
+  <p>Go to "/api/projects" or "/api/actions" to get started!"</p>
+  `);
+});
+
+
+//error handler
+server.use((error, req, res, next) => {
+  res.status(error.status || 500).json({message: error.message, stack: error.stack});
+});
 
 module.exports = server;
