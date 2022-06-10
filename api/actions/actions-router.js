@@ -1,7 +1,7 @@
 // Write your "actions" router here!
 const express = require('express');
 const Actions = require('./actions-model');
-const {verifyAction} = require('./actions-middlware');
+const {verifyAction, verifyNewAction} = require('./actions-middleware');
 
 const router = express.Router();
 
@@ -15,6 +15,10 @@ router.get('/:id', verifyAction, (req, res) => {
   res.status(200).json(req.validActions);
 });
 
-
+router.post('/', verifyNewAction, (req, res) => [
+Actions.insert(req.newAction).then(result => {
+  res.status(201).json(result);
+})
+]);
 
 module.exports = router;
