@@ -1,10 +1,13 @@
 //imports
 const express = require('express');
 
-//server setup & middleware
+//server setup
 const server = express();
 server.use(express.json());
 
+//routers
+const projectRouter = require('./projects/projects-router');
+server.use('/api/projects', projectRouter);
 
 server.get('/', (req, res) => {
   res.send(`
@@ -12,6 +15,7 @@ server.get('/', (req, res) => {
   <p>Go to "/api/projects" or "/api/actions" to get started!"</p>
   `);
 });
+
 
 
 //error handler
