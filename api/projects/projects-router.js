@@ -27,4 +27,13 @@ router.put('/:id', verifyProject, verifyNewProject, (req, res) => {
   })
 })
 
+router.delete("/:id", verifyProject, (req, res) => {
+  Projects.remove(req.validProject.id).then(() => {
+    res.status(200).end();
+  })
+})
+router.get('/:id/actions', verifyProject, (req, res) => {
+  res.status(200).json(req.validProject.actions);
+})
+
 module.exports = router;
