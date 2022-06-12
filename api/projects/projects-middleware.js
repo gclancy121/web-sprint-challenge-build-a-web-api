@@ -20,7 +20,14 @@ function verifyNewProject(req, res, next) {
       res.status(400).json({message: "project description required"});
     }
   }
-  req.newProject = {name: name.trim(), description: description.trim()};
+  function isCompleted() {
+    if (req.body.completed == null) {
+      return false;
+    } else {
+      return req.body.completed;
+    }
+  }
+  req.newProject = {name: name.trim(), description: description.trim(), completed: isCompleted()};
   next();
 }
 

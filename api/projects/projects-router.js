@@ -22,9 +22,14 @@ router.post('/', verifyNewProject, (req, res) => {
 })
 
 router.put('/:id', verifyProject, verifyNewProject, (req, res) => {
-  Projects.update(req.validProject.id, req.newProject).then(result => {
-    res.status(200).json(result);
-  })
+  if (req.body.completed == null) {
+    res.status(400).json({message: 'completion update required'});
+  } else {
+    req.newProject = {...req.newProject, completed: req.body.completed};
+    Projects.update(req.validProject.id, req.newProject).then(result => {
+      res.status(200).json(result);
+    })
+  }
 })
 
 router.delete("/:id", verifyProject, (req, res) => {
@@ -33,7 +38,8 @@ router.delete("/:id", verifyProject, (req, res) => {
   })
 })
 router.get('/:id/actions', verifyProject, (req, res) => {
-  res.status(200).json(req.validProject.actions);
+  console.log(req.validProject.actions)
+  // res.status(200).json(req.validProject.actions);
 })
 
 module.exports = router;

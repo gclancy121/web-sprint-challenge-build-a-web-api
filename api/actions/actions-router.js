@@ -15,10 +15,24 @@ router.get('/:id', verifyAction, (req, res) => {
   res.status(200).json(req.validActions);
 });
 
-router.post('/', verifyNewAction, (req, res) => [
-Actions.insert(req.newAction).then(result => {
-  res.status(201).json(result);
+router.post('/', verifyNewAction, (req, res) => {
+  Actions.insert(req.newAction).then(result => {
+    res.status(201).json(result);
+  })
+});
+
+router.put('/:id', verifyNewAction, (req, res) => {
+  const changes = {description: req.newAction.description, notes: req.newAction.notes};
+  const id = req.newAction.project_id;
+  Actions.update(id, changes).then(result => {
+    res.status(200).json(result);
+  })
 })
-]);
+
+router.delete('/:id', verifyAction, (req, res) => {
+  Actions.remove(req.validActions.id).then(() => {
+    res.status(200).end();
+  })
+})
 
 module.exports = router;
