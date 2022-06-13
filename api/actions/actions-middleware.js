@@ -28,11 +28,11 @@ if (typeof description !== 'string' || description == null || description.length
 if (typeof notes !== 'string' || notes == null) {
   res.status(400).json({message: "invalid notes"});
 }
-if (completed === 'true') {
+if (completed === true) {
   req.newAction = {description: description, notes: notes, completed: completed};
   req.validId = project_id;
 } else {
-  req.newAction = {description: description, notes: notes};
+  req.newAction = {description: description, notes: notes, completed: false};
   req.validId = project_id;
 }
 

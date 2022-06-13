@@ -20,7 +20,7 @@ router.post('/', verifyNewAction, (req, res, next) => {
  const usad = {
   project_id: req.validId,
   description: req.newAction.description,
-  notes: req.newAction.notes
+  notes: req.newAction.notes,
  }
  Actions.insert(usad).then(result => {
   res.status(201).json(result);

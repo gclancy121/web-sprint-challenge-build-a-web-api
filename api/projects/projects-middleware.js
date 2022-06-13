@@ -13,6 +13,7 @@ function verifyProject(req, res, next) {
 function verifyNewProject(req, res, next) {
   const name = req.body.name;
   const description = req.body.description;
+  const completed = req.body.completed;
   if (typeof name !== 'string' || name == null || name.trim() === '') {
     res.status(400).json({message: "project name required"});
   } else {
@@ -20,14 +21,12 @@ function verifyNewProject(req, res, next) {
       res.status(400).json({message: "project description required"});
     }
   }
-  function isCompleted() {
-    if (req.body.completed == null) {
-      return false;
-    } else {
-      return req.body.completed;
-    }
+  if (completed === true) {
+    req.newProject = {name: name.trim(), description: description.trim(), completed: req.body.completed}
+  } else {
+    req.newProject = {name: name.trim(), description: description.trim()};
   }
-  req.newProject = {name: name.trim(), description: description.trim(), completed: isCompleted()};
+  
   next();
 }
 
