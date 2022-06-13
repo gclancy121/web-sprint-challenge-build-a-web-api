@@ -12,34 +12,33 @@ Actions.get(req.params.id).then(result => {
 }
 
 function verifyNewAction(req, res, next) {
- const id = req.body.project_id;
- const description = req.body.description;
- const notes = req.body.notes;
- if (typeof id !== "number" || id == null) {
-  res.status(400).json({message: 'invalid id'});
- } else {
-    Actions.get(id).then(result => {
-      if (Array.isArray(result) || result == null) {
-        res.status(400).json({message: "invalid id"});
-      } else {
-        if (typeof description !== 'string' || description == null || description.trim() === '') {
-          res.status(400).json({message: "invalid action description"});
-         } else {
-          if (description.length > 128) {
-            res.status(400).json({message: "description is too long"});
-           } else {
-            if (typeof notes !== 'string' || notes == null || notes.trim() === '') {
-              res.status(400).json({message: "invalid action notes"});
-            }
-           }
-         }
-      }
-    })
- }
-
- req.newAction = {project_id: req.body.project_id, description: description.trim(), notes: notes.trim()};
- next();
+const project_id = (req.params.id == null ? req.body.project_id : req.params.id);
+const description = req.body.description;
+const notes = req.body.notes;
+const completed = req.body.completed;
+Actions.get(project_id).then(result => {
+  if (result == null || Array.isArray(result) === true) {
+    res.status(400).json({message: 'invalid id'});
+    return;
+  }
+})
+if (typeof description !== 'string' || description == null || description.length > 128) {
+  res.status(400).json({message: 'invalid description'});
 }
+if (typeof notes !== 'string' || notes == null) {
+  res.status(400).json({message: "invalid notes"});
+}
+if (completed === 'true') {
+  req.newAction = {description: description, notes: notes, completed: completed};
+  req.validId = project_id;
+} else {
+  req.newAction = {description: description, notes: notes};
+  req.validId = project_id;
+}
+
+next();
+}
+ 
 
 module.exports = {
   verifyAction,

@@ -15,18 +15,22 @@ router.get('/:id', verifyAction, (req, res) => {
   res.status(200).json(req.validActions);
 });
 
-router.post('/', verifyNewAction, (req, res) => {
-  Actions.insert(req.newAction).then(result => {
-    res.status(201).json(result);
-  })
+router.post('/', verifyNewAction, (req, res, next) => {
+ console.log(req.newAction, req.validId);
+ const usad = {
+  project_id: req.validId,
+  description: req.newAction.description,
+  notes: req.newAction.notes
+ }
+ Actions.insert(usad).then(result => {
+  res.status(201).json(result);
+ }).catch(err => next(err));
 });
-
-router.put('/:id', verifyNewAction, (req, res) => {
-  const changes = {description: req.newAction.description, notes: req.newAction.notes};
-  const id = req.newAction.project_id;
-  Actions.update(id, changes).then(result => {
-    res.status(200).json(result);
-  })
+ 
+router.put('/:id', verifyNewAction, (req, res, next) => {
+ Actions.update(req.validId, req.newAction).then(result =>  {
+  res.status(200).json(result);
+ }).catch(err => next(err));
 })
 
 router.delete('/:id', verifyAction, (req, res) => {
