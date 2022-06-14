@@ -22,6 +22,9 @@ router.post('/', verifyNewAction, (req, res, next) => {
   description: req.newAction.description,
   notes: req.newAction.notes,
  }
+ if (req.newAction.completed !== null) {
+  usad.completed = req.newAction.completed;
+ }
  Actions.insert(usad).then(result => {
   res.status(201).json(result);
  }).catch(err => next(err));
